@@ -1,1 +1,1 @@
-# ts-nest-node-mongodb
+# ts-nest-node-mongo

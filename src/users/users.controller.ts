@@ -18,4 +18,9 @@ export class UsersController {
             id: Number(id)
         }
     }
+
+    @Get(':id')
+    getAllUser(): any {
+        return;
+    }
 }

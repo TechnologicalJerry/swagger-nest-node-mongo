@@ -6,9 +6,12 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class FileuploadController {
 
 
-    @Post('upload')
-    @UseInterceptors(FileInterceptor('file'))
-    uploadFile(@UploadedFile() file: Express.Multer.File) {
-        console.log(file);
+    @Post('/upload')
+    handelUpload() {
+        return 'file upload API';
     }
+    // @UseInterceptors(FileInterceptor('file'))
+    // uploadFile(@UploadedFile() file: Express.Multer.File) {
+    //     console.log(file);
+    // }
 }

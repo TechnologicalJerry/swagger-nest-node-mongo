@@ -7,11 +7,12 @@ export class FileuploadController {
 
 
     @Post('/upload')
-    handelUpload() {
+    // handelUpload() {
+    //     return 'file upload API';
+    // }
+    @UseInterceptors(FileInterceptor('file'))
+    uploadFile(@UploadedFile() file: Express.Multer.File) {
+        console.log('Uploading file ==>',file);
         return 'file upload API';
     }
-    // @UseInterceptors(FileInterceptor('file'))
-    // uploadFile(@UploadedFile() file: Express.Multer.File) {
-    //     console.log(file);
-    // }
 }

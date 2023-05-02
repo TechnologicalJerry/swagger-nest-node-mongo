@@ -6,13 +6,15 @@ import { TodosModule } from './todos/todos.module';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { FileuploadModule } from './fileupload/fileupload.module';
+// import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
     TodosModule,
     UsersModule,
     ProductsModule,
-    FileuploadModule
+    FileuploadModule,
+    
   ],
   controllers: [AppController],
   providers: [AppService],

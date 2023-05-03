@@ -14,7 +14,7 @@ import { FileuploadModule } from './fileupload/fileupload.module';
     UsersModule,
     ProductsModule,
     FileuploadModule,
-    
+
   ],
   controllers: [AppController],
   providers: [AppService],

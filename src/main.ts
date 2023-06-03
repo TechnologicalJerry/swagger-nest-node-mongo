@@ -8,6 +8,6 @@ const HOST = 'LOCALHOST';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(PORT);
-  Logger.log(`SERVER RUNNING ON HOST=>${HOST} AT PORT=>${PORT}`)
+  Logger.log(`SERVER RUNNING ON HOST=> ${HOST} AT PORT=> ${PORT}`)
 }
 bootstrap();

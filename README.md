@@ -97,89 +97,78 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
-# User Management API
+# User Management API with Swagger Documentation
 
-A RESTful API for managing users with MongoDB, built with NestJS and Swagger documentation.
+A comprehensive RESTful API for managing users with MongoDB, featuring complete Swagger documentation.
 
-## Features
+## 🚀 Features
 
-- ✅ **Full CRUD Operations** for users
-- ✅ **Input Validation** with class-validator
-- ✅ **Swagger API Documentation**
-- ✅ **MongoDB Integration** with Mongoose
-- ✅ **Password Confirmation** validation
-- ✅ **Unique Constraints** for email and username
-- ✅ **TypeScript** throughout
+- **User CRUD Operations**: Create, Read, Update, and Delete users
+- **Data Validation**: Comprehensive input validation using class-validator
+- **MongoDB Integration**: Mongoose ODM for database operations
+- **Swagger Documentation**: Complete API documentation with interactive UI
+- **TypeScript**: Full type safety and IntelliSense support
+- **NestJS Framework**: Modern, scalable Node.js framework
 
-## User Structure
+## 📋 Prerequisites
 
-The user object now includes the following fields:
+- Node.js (v16 or higher)
+- MongoDB (local or cloud instance)
+- npm or yarn package manager
 
-```json
-{
-  "firstName": "John",
-  "lastName": "Doe", 
-  "userName": "johndoe123",
-  "email": "john.doe@example.com",
-  "phone": "+1234567890",
-  "gender": "male",
-  "address": "123 Main St, City, State 12345",
-  "password": "password123",
-  "confirmPassword": "password123"
-}
+## 🛠️ Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd swagger-nest-node-mongo
 ```
 
-### Field Validations
-
-- **firstName**: Required string
-- **lastName**: Required string  
-- **userName**: Required string, must be unique
-- **email**: Required valid email, must be unique
-- **phone**: Required string with phone number format
-- **gender**: Required enum (male, female, other)
-- **address**: Required string
-- **password**: Required string, minimum 6 characters
-- **confirmPassword**: Required string, must match password
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/users` | Create a new user |
-| `GET` | `/users` | Get all users |
-| `GET` | `/users/:id` | Get user by ID |
-| `PATCH` | `/users/:id` | Update user |
-| `DELETE` | `/users/:id` | Delete user |
-| `GET` | `/api` | Swagger documentation |
-
-## Installation
-
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-## Running the Application
-
-```bash
-# Development mode
-npm run start:dev
-
-# Production mode
-npm run start:prod
+3. Set up environment variables (create a `.env` file):
+```env
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/user-management
 ```
 
-## Database Setup
+4. Start the development server:
+```bash
+npm run start:dev
+```
 
-Make sure MongoDB is running on `localhost:27017`. The application will automatically create the database `swagger-nest-node-mongo`.
+## 📚 API Documentation
 
-## API Documentation
+Once the application is running, you can access the Swagger documentation at:
 
-Once the application is running, visit `http://localhost:3000/api` to access the Swagger documentation.
+**http://localhost:3000/api**
 
-## Example Usage
+### Swagger UI Features
+
+- **Interactive Documentation**: Test API endpoints directly from the browser
+- **Request/Response Examples**: Pre-filled examples for all endpoints
+- **Schema Validation**: Automatic validation of request/response schemas
+- **Authentication Support**: Ready for future authentication implementation
+- **Export Options**: Export OpenAPI specification in various formats
+
+## 🔗 API Endpoints
+
+### Application Status
+- `GET /` - Get application status
+
+### User Management
+- `POST /users` - Create a new user
+- `GET /users` - Get all users
+- `GET /users/:id` - Get user by ID
+- `PATCH /users/:id` - Update user
+- `DELETE /users/:id` - Delete user
+
+## 📖 API Usage Examples
 
 ### Create a User
-
 ```bash
 curl -X POST http://localhost:3000/users \
   -H "Content-Type: application/json" \
@@ -197,49 +186,131 @@ curl -X POST http://localhost:3000/users \
 ```
 
 ### Get All Users
-
 ```bash
-curl http://localhost:3000/users
+curl -X GET http://localhost:3000/users
 ```
 
 ### Get User by ID
-
 ```bash
-curl http://localhost:3000/users/507f1f77bcf86cd799439011
+curl -X GET http://localhost:3000/users/507f1f77bcf86cd799439011
 ```
 
 ### Update User
-
 ```bash
 curl -X PATCH http://localhost:3000/users/507f1f77bcf86cd799439011 \
   -H "Content-Type: application/json" \
   -d '{
     "firstName": "Jane",
-    "lastName": "Smith"
+    "email": "jane.doe@example.com"
   }'
 ```
 
 ### Delete User
-
 ```bash
 curl -X DELETE http://localhost:3000/users/507f1f77bcf86cd799439011
 ```
 
-## Error Handling
+## 🏗️ Project Structure
 
-The API returns appropriate HTTP status codes:
+```
+src/
+├── app.controller.ts          # Main application controller
+├── app.module.ts             # Root application module
+├── app.service.ts            # Application service
+├── main.ts                   # Application bootstrap
+└── users/
+    ├── controllers/
+    │   └── users.controller.ts    # User endpoints
+    ├── dto/
+    │   ├── create-user.dto.ts     # Create user data transfer object
+    │   └── update-user.dto.ts     # Update user data transfer object
+    ├── entities/
+    │   └── user.entity.ts         # User entity
+    ├── schemas/
+    │   └── user.schema.ts         # Mongoose schema
+    ├── services/
+    │   └── users.service.ts       # User business logic
+    └── users.module.ts            # User module
+```
 
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request (validation errors)
-- `404` - Not Found
-- `500` - Internal Server Error
+## 🔧 Configuration
 
-## Validation Rules
+### Swagger Configuration
 
-- Email must be unique
-- Username must be unique
-- Password and confirmPassword must match
-- Phone number must follow a valid format
-- Gender must be one of: male, female, other
-- Password must be at least 6 characters long
+The Swagger documentation is configured in `src/main.ts` with the following features:
+
+- **Custom UI**: Enhanced Swagger UI with custom styling
+- **Multiple Servers**: Support for development and production environments
+- **Contact Information**: API support contact details
+- **License Information**: MIT license details
+- **Comprehensive Documentation**: Detailed descriptions for all endpoints
+
+### Validation
+
+The API uses comprehensive validation with the following rules:
+
+- **Email**: Must be a valid email format
+- **Username**: 3-30 characters, alphanumeric and underscores only
+- **Phone**: International phone number format
+- **Password**: Minimum 6 characters
+- **Required Fields**: All fields are required for user creation
+- **Unique Constraints**: Email and username must be unique
+
+## 🧪 Testing
+
+Run the test suite:
+
+```bash
+# Unit tests
+npm run test
+
+# e2e tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+```
+
+## 🚀 Deployment
+
+### Production Build
+
+```bash
+npm run build
+npm run start:prod
+```
+
+### Environment Variables
+
+Set the following environment variables for production:
+
+```env
+PORT=3000
+MONGODB_URI=mongodb://your-production-mongodb-uri
+NODE_ENV=production
+```
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
+
+## 📞 Support
+
+For support and questions:
+
+- **Email**: support@example.com
+- **GitHub Issues**: [Create an issue](https://github.com/your-repo/issues)
+- **Documentation**: [Swagger UI](http://localhost:3000/api)
+
+## 🔄 Version History
+
+- **v1.0.0** - Initial release with complete CRUD operations and Swagger documentation

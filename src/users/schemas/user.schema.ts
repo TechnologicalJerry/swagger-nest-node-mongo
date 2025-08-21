@@ -74,13 +74,60 @@ export class User {
     address: string;
 
     @ApiProperty({
-      description: 'The password of the user (will be hashed in production)',
-      example: 'password123',
-      minLength: 6,
+      description: 'The hashed password of the user',
+      example: 'hashedPassword123',
       writeOnly: true
     })
-    @Prop({ required: true, minlength: 6 })
+    @Prop({ required: true })
     password: string;
+
+    @ApiProperty({
+      description: 'Whether the user email is verified',
+      example: false,
+      readOnly: true
+    })
+    @Prop({ default: false })
+    isEmailVerified: boolean;
+
+    @ApiProperty({
+      description: 'Email verification token',
+      example: 'verification-token-123',
+      readOnly: true
+    })
+    @Prop()
+    emailVerificationToken?: string;
+
+    @ApiProperty({
+      description: 'Email verification token expiry',
+      example: '2024-01-01T00:00:00.000Z',
+      readOnly: true
+    })
+    @Prop()
+    emailVerificationTokenExpiry?: Date;
+
+    @ApiProperty({
+      description: 'Password reset token',
+      example: 'reset-token-123',
+      readOnly: true
+    })
+    @Prop()
+    passwordResetToken?: string;
+
+    @ApiProperty({
+      description: 'Password reset token expiry',
+      example: '2024-01-01T00:00:00.000Z',
+      readOnly: true
+    })
+    @Prop()
+    passwordResetTokenExpiry?: Date;
+
+    @ApiProperty({
+      description: 'Refresh tokens for the user',
+      example: ['refresh-token-1', 'refresh-token-2'],
+      readOnly: true
+    })
+    @Prop({ type: [String], default: [] })
+    refreshTokens: string[];
 
     @ApiProperty({
       description: 'The date when the user was created',

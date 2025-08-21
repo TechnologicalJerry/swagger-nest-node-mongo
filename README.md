@@ -96,3 +96,150 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+# User Management API
+
+A RESTful API for managing users with MongoDB, built with NestJS and Swagger documentation.
+
+## Features
+
+- ✅ **Full CRUD Operations** for users
+- ✅ **Input Validation** with class-validator
+- ✅ **Swagger API Documentation**
+- ✅ **MongoDB Integration** with Mongoose
+- ✅ **Password Confirmation** validation
+- ✅ **Unique Constraints** for email and username
+- ✅ **TypeScript** throughout
+
+## User Structure
+
+The user object now includes the following fields:
+
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe", 
+  "userName": "johndoe123",
+  "email": "john.doe@example.com",
+  "phone": "+1234567890",
+  "gender": "male",
+  "address": "123 Main St, City, State 12345",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+```
+
+### Field Validations
+
+- **firstName**: Required string
+- **lastName**: Required string  
+- **userName**: Required string, must be unique
+- **email**: Required valid email, must be unique
+- **phone**: Required string with phone number format
+- **gender**: Required enum (male, female, other)
+- **address**: Required string
+- **password**: Required string, minimum 6 characters
+- **confirmPassword**: Required string, must match password
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/users` | Create a new user |
+| `GET` | `/users` | Get all users |
+| `GET` | `/users/:id` | Get user by ID |
+| `PATCH` | `/users/:id` | Update user |
+| `DELETE` | `/users/:id` | Delete user |
+| `GET` | `/api` | Swagger documentation |
+
+## Installation
+
+```bash
+npm install
+```
+
+## Running the Application
+
+```bash
+# Development mode
+npm run start:dev
+
+# Production mode
+npm run start:prod
+```
+
+## Database Setup
+
+Make sure MongoDB is running on `localhost:27017`. The application will automatically create the database `swagger-nest-node-mongo`.
+
+## API Documentation
+
+Once the application is running, visit `http://localhost:3000/api` to access the Swagger documentation.
+
+## Example Usage
+
+### Create a User
+
+```bash
+curl -X POST http://localhost:3000/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "John",
+    "lastName": "Doe",
+    "userName": "johndoe123",
+    "email": "john.doe@example.com",
+    "phone": "+1234567890",
+    "gender": "male",
+    "address": "123 Main St, City, State 12345",
+    "password": "password123",
+    "confirmPassword": "password123"
+  }'
+```
+
+### Get All Users
+
+```bash
+curl http://localhost:3000/users
+```
+
+### Get User by ID
+
+```bash
+curl http://localhost:3000/users/507f1f77bcf86cd799439011
+```
+
+### Update User
+
+```bash
+curl -X PATCH http://localhost:3000/users/507f1f77bcf86cd799439011 \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "Jane",
+    "lastName": "Smith"
+  }'
+```
+
+### Delete User
+
+```bash
+curl -X DELETE http://localhost:3000/users/507f1f77bcf86cd799439011
+```
+
+## Error Handling
+
+The API returns appropriate HTTP status codes:
+
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request (validation errors)
+- `404` - Not Found
+- `500` - Internal Server Error
+
+## Validation Rules
+
+- Email must be unique
+- Username must be unique
+- Password and confirmPassword must match
+- Phone number must follow a valid format
+- Gender must be one of: male, female, other
+- Password must be at least 6 characters long

@@ -4,12 +4,16 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
+import { EmailService } from '../auth/email.service';
 
 @Injectable()
 export class UsersService {
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private emailService: EmailService,
   ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -30,11 +34,39 @@ export class UsersService {
       throw new BadRequestException('User with this username already exists');
     }
 
+    // Hash password
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
+
+    // Generate email verification token
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
     // Remove confirmPassword from the data to be saved
     const { confirmPassword, ...userData } = createUserDto;
     
-    const createdUser = new this.userModel(userData);
-    return createdUser.save();
+    const createdUser = new this.userModel({
+      ...userData,
+      password: hashedPassword,
+      emailVerificationToken: verificationToken,
+      emailVerificationTokenExpiry: verificationTokenExpiry,
+      isEmailVerified: false,
+    });
+
+    const savedUser = await createdUser.save();
+
+    // Send verification email
+    try {
+      await this.emailService.sendEmailVerification(
+        savedUser.email,
+        verificationToken,
+        savedUser.userName
+      );
+    } catch (error) {
+      // Log error but don't fail user creation
+      console.error('Failed to send verification email:', error);
+    }
+
+    return savedUser;
   }
 
   findAll(): Promise<User[]> {
@@ -47,6 +79,10 @@ export class UsersService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
     return user;
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userModel.findOne({ email }).exec();
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
@@ -70,6 +106,11 @@ export class UsersService {
       if (existingUsername) {
         throw new BadRequestException('User with this username already exists');
       }
+    }
+
+    // If password is being updated, hash it
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 12);
     }
 
     const updatedUser = await this.userModel

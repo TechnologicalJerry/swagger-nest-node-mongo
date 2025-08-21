@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
+import { Gender } from '../dto/create-user.dto';
 
 export type UserDocument = User & Document;
 
@@ -13,11 +14,25 @@ export class User {
     _id: string;
 
     @ApiProperty({
-      description: 'The name of the user',
-      example: 'John Doe'
+      description: 'The first name of the user',
+      example: 'John'
     })
     @Prop({ required: true })
-    name: string;
+    firstName: string;
+
+    @ApiProperty({
+      description: 'The last name of the user',
+      example: 'Doe'
+    })
+    @Prop({ required: true })
+    lastName: string;
+
+    @ApiProperty({
+      description: 'The username of the user',
+      example: 'johndoe123'
+    })
+    @Prop({ required: true, unique: true })
+    userName: string;
 
     @ApiProperty({
       description: 'The email address of the user',
@@ -25,6 +40,28 @@ export class User {
     })
     @Prop({ required: true, unique: true })
     email: string;
+
+    @ApiProperty({
+      description: 'The phone number of the user',
+      example: '+1234567890'
+    })
+    @Prop({ required: true })
+    phone: string;
+
+    @ApiProperty({
+      description: 'The gender of the user',
+      enum: Gender,
+      example: Gender.MALE
+    })
+    @Prop({ required: true, enum: Gender })
+    gender: Gender;
+
+    @ApiProperty({
+      description: 'The address of the user',
+      example: '123 Main St, City, State 12345'
+    })
+    @Prop({ required: true })
+    address: string;
 
     @ApiProperty({
       description: 'The password of the user (will be hashed in production)',

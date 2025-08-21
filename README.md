@@ -97,26 +97,28 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
-# User Management API with Swagger Documentation
+# NestJS Authentication API with JWT
 
-A comprehensive RESTful API for managing users with MongoDB, featuring complete Swagger documentation.
+A comprehensive authentication system built with NestJS, MongoDB, and JWT tokens. This API includes user registration, login, email verification, password reset, and token management.
 
-## 🚀 Features
+## Features
 
-- **User CRUD Operations**: Create, Read, Update, and Delete users
-- **Data Validation**: Comprehensive input validation using class-validator
-- **MongoDB Integration**: Mongoose ODM for database operations
-- **Swagger Documentation**: Complete API documentation with interactive UI
-- **TypeScript**: Full type safety and IntelliSense support
-- **NestJS Framework**: Modern, scalable Node.js framework
+- **User Authentication**: Login with email and password
+- **JWT Tokens**: Access, Refresh, and ID tokens
+- **Email Verification**: Automatic email verification on registration
+- **Password Reset**: Forgot password and reset password functionality
+- **Token Management**: Refresh token rotation and logout
+- **Security**: Password hashing with bcrypt, secure token storage
+- **API Documentation**: Swagger/OpenAPI documentation
+- **Email Integration**: Nodemailer for sending emails
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js (v16 or higher)
-- MongoDB (local or cloud instance)
-- npm or yarn package manager
+- MongoDB (local or cloud)
+- Email service (Gmail, SendGrid, etc.)
 
-## 🛠️ Installation
+## Installation
 
 1. Clone the repository:
 ```bash
@@ -129,188 +131,245 @@ cd swagger-nest-node-mongo
 npm install
 ```
 
-3. Set up environment variables (create a `.env` file):
-```env
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/user-management
+3. Create environment file:
+```bash
+cp env.example .env
 ```
 
-4. Start the development server:
+4. Configure environment variables in `.env`:
+```env
+# Database Configuration
+MONGODB_URI=mongodb://localhost:27017/swagger-nest-node-mongo
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_REFRESH_SECRET=your-super-secret-refresh-jwt-key-change-this-in-production
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+JWT_ID_EXPIRES_IN=1h
+
+# Email Configuration (Gmail example)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+SMTP_FROM=noreply@yourapp.com
+
+# Frontend URL for email links
+FRONTEND_URL=http://localhost:3000
+
+# Application Configuration
+PORT=3000
+NODE_ENV=development
+```
+
+## Email Setup
+
+### Gmail Setup
+1. Enable 2-factor authentication on your Gmail account
+2. Generate an App Password:
+   - Go to Google Account settings
+   - Security → 2-Step Verification → App passwords
+   - Generate a new app password for "Mail"
+3. Use the generated password in `SMTP_PASS`
+
+### Other Email Providers
+Update the SMTP settings in `.env` according to your email provider's configuration.
+
+## Running the Application
+
+### Development
 ```bash
 npm run start:dev
 ```
 
-## 📚 API Documentation
-
-Once the application is running, you can access the Swagger documentation at:
-
-**http://localhost:3000/api**
-
-### Swagger UI Features
-
-- **Interactive Documentation**: Test API endpoints directly from the browser
-- **Request/Response Examples**: Pre-filled examples for all endpoints
-- **Schema Validation**: Automatic validation of request/response schemas
-- **Authentication Support**: Ready for future authentication implementation
-- **Export Options**: Export OpenAPI specification in various formats
-
-## 🔗 API Endpoints
-
-### Application Status
-- `GET /` - Get application status
-
-### User Management
-- `POST /users` - Create a new user
-- `GET /users` - Get all users
-- `GET /users/:id` - Get user by ID
-- `PATCH /users/:id` - Update user
-- `DELETE /users/:id` - Delete user
-
-## 📖 API Usage Examples
-
-### Create a User
-```bash
-curl -X POST http://localhost:3000/users \
-  -H "Content-Type: application/json" \
-  -d '{
-    "firstName": "John",
-    "lastName": "Doe",
-    "userName": "johndoe123",
-    "email": "john.doe@example.com",
-    "phone": "+1234567890",
-    "gender": "male",
-    "address": "123 Main St, City, State 12345",
-    "password": "password123",
-    "confirmPassword": "password123"
-  }'
-```
-
-### Get All Users
-```bash
-curl -X GET http://localhost:3000/users
-```
-
-### Get User by ID
-```bash
-curl -X GET http://localhost:3000/users/507f1f77bcf86cd799439011
-```
-
-### Update User
-```bash
-curl -X PATCH http://localhost:3000/users/507f1f77bcf86cd799439011 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "firstName": "Jane",
-    "email": "jane.doe@example.com"
-  }'
-```
-
-### Delete User
-```bash
-curl -X DELETE http://localhost:3000/users/507f1f77bcf86cd799439011
-```
-
-## 🏗️ Project Structure
-
-```
-src/
-├── app.controller.ts          # Main application controller
-├── app.module.ts             # Root application module
-├── app.service.ts            # Application service
-├── main.ts                   # Application bootstrap
-└── users/
-    ├── controllers/
-    │   └── users.controller.ts    # User endpoints
-    ├── dto/
-    │   ├── create-user.dto.ts     # Create user data transfer object
-    │   └── update-user.dto.ts     # Update user data transfer object
-    ├── entities/
-    │   └── user.entity.ts         # User entity
-    ├── schemas/
-    │   └── user.schema.ts         # Mongoose schema
-    ├── services/
-    │   └── users.service.ts       # User business logic
-    └── users.module.ts            # User module
-```
-
-## 🔧 Configuration
-
-### Swagger Configuration
-
-The Swagger documentation is configured in `src/main.ts` with the following features:
-
-- **Custom UI**: Enhanced Swagger UI with custom styling
-- **Multiple Servers**: Support for development and production environments
-- **Contact Information**: API support contact details
-- **License Information**: MIT license details
-- **Comprehensive Documentation**: Detailed descriptions for all endpoints
-
-### Validation
-
-The API uses comprehensive validation with the following rules:
-
-- **Email**: Must be a valid email format
-- **Username**: 3-30 characters, alphanumeric and underscores only
-- **Phone**: International phone number format
-- **Password**: Minimum 6 characters
-- **Required Fields**: All fields are required for user creation
-- **Unique Constraints**: Email and username must be unique
-
-## 🧪 Testing
-
-Run the test suite:
-
-```bash
-# Unit tests
-npm run test
-
-# e2e tests
-npm run test:e2e
-
-# Test coverage
-npm run test:cov
-```
-
-## 🚀 Deployment
-
-### Production Build
-
+### Production
 ```bash
 npm run build
 npm run start:prod
 ```
 
-### Environment Variables
+## API Documentation
 
-Set the following environment variables for production:
+Once the application is running, visit:
+- Swagger UI: `http://localhost:3000/api`
 
-```env
-PORT=3000
-MONGODB_URI=mongodb://your-production-mongodb-uri
-NODE_ENV=production
+## API Endpoints
+
+### Authentication Endpoints
+
+#### POST `/auth/login`
+User login with email and password.
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
 ```
 
-## 📝 License
+#### POST `/auth/refresh`
+Refresh access token using refresh token.
+```json
+{
+  "refreshToken": "your-refresh-token"
+}
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+#### POST `/auth/logout`
+Logout user and invalidate refresh token.
+```json
+{
+  "refreshToken": "your-refresh-token"
+}
+```
 
-## 🤝 Contributing
+#### POST `/auth/forgot-password`
+Request password reset email.
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+#### POST `/auth/reset-password`
+Reset password using reset token.
+```json
+{
+  "token": "reset-token",
+  "newPassword": "newpassword123"
+}
+```
+
+#### POST `/auth/verify-email`
+Verify email address using verification token.
+```json
+{
+  "token": "verification-token"
+}
+```
+
+#### POST `/auth/resend-verification/:email`
+Resend email verification.
+```
+POST /auth/resend-verification/user@example.com
+```
+
+#### GET `/auth/profile`
+Get user profile (requires authentication).
+
+### User Management Endpoints
+
+#### POST `/users`
+Create new user (automatically sends verification email).
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "userName": "johndoe123",
+  "email": "john.doe@example.com",
+  "phone": "+1234567890",
+  "gender": "MALE",
+  "address": "123 Main St, City, State 12345",
+  "password": "password123",
+  "confirmPassword": "password123"
+}
+```
+
+#### GET `/users`
+Get all users (requires authentication).
+
+#### GET `/users/:id`
+Get user by ID (requires authentication).
+
+#### PATCH `/users/:id`
+Update user (requires authentication).
+
+#### DELETE `/users/:id`
+Delete user (requires authentication).
+
+## Authentication Flow
+
+1. **Registration**: User registers → Verification email sent → User verifies email
+2. **Login**: User logs in → Receives access, refresh, and ID tokens
+3. **API Access**: Use access token in Authorization header: `Bearer <access-token>`
+4. **Token Refresh**: Use refresh token to get new access token
+5. **Logout**: Invalidate refresh token
+
+## Security Features
+
+- **Password Hashing**: bcrypt with salt rounds
+- **JWT Tokens**: Secure token-based authentication
+- **Token Rotation**: Refresh tokens are rotated on each use
+- **Email Verification**: Required before login
+- **Password Reset**: Secure token-based password reset
+- **Token Expiration**: Configurable token lifetimes
+- **Rate Limiting**: Built-in protection against brute force
+
+## Token Types
+
+### Access Token
+- Short-lived (15 minutes by default)
+- Used for API authentication
+- Contains user identity information
+
+### Refresh Token
+- Long-lived (7 days by default)
+- Used to obtain new access tokens
+- Stored securely in database
+- Rotated on each use
+
+### ID Token
+- Medium-lived (1 hour by default)
+- Contains user profile information
+- Used for client-side user identification
+
+## Error Handling
+
+The API returns appropriate HTTP status codes and error messages:
+
+- `400 Bad Request`: Invalid input data
+- `401 Unauthorized`: Invalid credentials or missing token
+- `403 Forbidden`: Insufficient permissions
+- `404 Not Found`: Resource not found
+- `500 Internal Server Error`: Server error
+
+## Testing
+
+Run the test suite:
+```bash
+npm run test
+```
+
+Run e2e tests:
+```bash
+npm run test:e2e
+```
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MONGODB_URI` | MongoDB connection string | `mongodb://localhost:27017/swagger-nest-node-mongo` |
+| `JWT_SECRET` | JWT signing secret | Required |
+| `JWT_REFRESH_SECRET` | JWT refresh token secret | Required |
+| `JWT_ACCESS_EXPIRES_IN` | Access token expiration | `15m` |
+| `JWT_REFRESH_EXPIRES_IN` | Refresh token expiration | `7d` |
+| `JWT_ID_EXPIRES_IN` | ID token expiration | `1h` |
+| `SMTP_HOST` | SMTP server host | `smtp.gmail.com` |
+| `SMTP_PORT` | SMTP server port | `587` |
+| `SMTP_USER` | SMTP username | Required |
+| `SMTP_PASS` | SMTP password | Required |
+| `SMTP_FROM` | From email address | `noreply@yourapp.com` |
+| `FRONTEND_URL` | Frontend URL for email links | `http://localhost:3000` |
+
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
+4. Add tests
+5. Submit a pull request
 
-## 📞 Support
+## License
 
-For support and questions:
-
-- **Email**: support@example.com
-- **GitHub Issues**: [Create an issue](https://github.com/your-repo/issues)
-- **Documentation**: [Swagger UI](http://localhost:3000/api)
-
-## 🔄 Version History
-
-- **v1.0.0** - Initial release with complete CRUD operations and Swagger documentation
+This project is licensed under the MIT License.
